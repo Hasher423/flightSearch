@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+
+@font-face {
+    font-family: Grotest;
+    src: url('/Fonts/grotest.ttf');
+}
+
+@theme{
+    --font-Grotest:Grotest;
+}
