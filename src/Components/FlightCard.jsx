@@ -1,25 +1,41 @@
-export default function FlightCard({ flight }) {
-  const price = flight.price.total;
-  const currency = flight.price.currency;
-  const stops = flight.itineraries[0].segments.length - 1;
-  const departure = flight.itineraries[0].segments[0].departure.at;
-  const arrival = flight.itineraries[0].segments[stops].arrival.at;
+import FlightCard from './FlightCard';
+
+export default function FlightList({ flights, loading }) {
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <div className="inline-block w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-gray-400 mt-4">Searching flights...</p>
+      </div>
+    );
+  }
+
+  if (flights.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-2xl mb-2">✈️ No flights found</p>
+        <p className="text-gray-400">Try adjusting your search or filters.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gray-800 p-6 rounded-lg mb-4 hover:bg-gray-750 transition">
-      <div className="flex justify-between items-center">
-        <div>
-          <p className="text-xl font-bold">{price} {currency}</p>
-          <p className="text-gray-400">
-            {new Date(departure).toLocaleTimeString()} → {new Date(arrival).toLocaleTimeString()}
-          </p>
-        </div>
-        <div className="text-right">
-          <p className="text-sm text-gray-400">
-            {stops === 0 ? 'Non-stop' : `${stops} stop(s)`}
-          </p>
-        </div>
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">
+          {flights.length} Flights Found
+        </h2>
+        <p className="text-gray-400 text-sm">
+          Sorted by price
+        </p>
       </div>
+      
+      {flights
+        .sort((a, b) => a.price - b.price) // Sort by price
+        .map(flight => (
+          <FlightCard key={flight.id} flight={flight} />
+        ))
+      }
     </div>
   );
 }
